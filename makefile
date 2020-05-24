@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := build
 .PHONY: build clean exec
+.PRECIOUS: .bin/%.o
 
 ##
 # `make build`
@@ -10,8 +11,14 @@ _SEARCH_ALGORITHMS := depth_first_search breadth_first_search \
 
 build: $(addprefix .bin/, $(_SEARCH_ALGORITHMS))
 
-.bin/%: %/main.cpp | .bin
-	g++ $< -o $@ -Wall
+.bin/%: .bin/%.o .bin/maze.o .bin/graph.o | .bin
+	g++ -Wall $(<) .bin/maze.o .bin/graph.o -o $(@)
+
+.bin/%.o: %/main.cpp | .bin
+	g++ -c -Wall $(<) -o $(@)
+
+.bin/%.o: common/%.cpp common/%.hpp | .bin
+	g++ -c -Wall $(<) -o $(@)
 
 .bin:
 	mkdir -p .bin
@@ -77,7 +84,7 @@ endif
 
 exec: .bin/$(_ALGORITHM)
 ifeq '$(_N)' '1'
-	exec ./.bin/$(_ALGORITHM)
+	exec .bin/$(_ALGORITHM)
 else
 	for i in $$(seq $(_N)); do ./.bin/$(_ALGORITHM) < $(_STDIN) > $(_STDOUT) 2> $(_STDERR); done
 endif

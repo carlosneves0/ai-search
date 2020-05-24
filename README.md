@@ -12,7 +12,7 @@ Implementation of 5 different AI search algorithms:
 
 ### `make` <sub>or `make build`</sub>
 
-Or  to compile all search algorithms. Each algorithm is a different program.
+Compile all search algorithms. Each algorithm is a different program.
 
 The binaries are saved in the `.bin` directory.
 
