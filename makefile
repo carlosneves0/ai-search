@@ -75,7 +75,7 @@ endif
 
 endif
 
-exec: build
+exec: .bin/$(_ALGORITHM)
 ifeq '$(_N)' '1'
 	exec ./.bin/$(_ALGORITHM)
 else
