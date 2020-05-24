@@ -44,7 +44,7 @@ int main()
 					first = false;
 			}
 			std::cout << "]\n";
-			break;
+			return 0;
 		}
 
 		if (!x.visited())
@@ -63,6 +63,8 @@ int main()
 			}
 		}
 	}
+
+	// TODO: no solution found!
 
 	return 0;
 }
