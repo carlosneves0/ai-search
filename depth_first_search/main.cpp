@@ -1,70 +1,48 @@
 #include <iostream>
 #include <stack>
-#include "../common/maze.hpp"
-#include "../common/graph.hpp"
+#include <algorithm>
+#include "../maze/maze.hpp"
+#include "../graph/graph.hpp"
 
+/**
+ * TODO: send execlog to stderr.
+ */
 int main()
 {
-	/* stdin */
+	/* Read and convert stdin into meaningful data structures. */
 	maze maze(std::cin);
 	graph graph(maze);
-	graph::node* source = graph.find(maze.source);
-	graph::node& target = *graph.find(maze.target);
+	graph::node source = graph.source();
+	graph::node target = graph.target();
 
-	/* search algorithm */
-	// TODO: send execlog to stderr
+	/* Depth First Search Algorithm */
+	std::stack<graph::path> L;
+	graph::path initial_path(source); L.push(initial_path);
+	bool visited[maze.m()][maze.n()]; std::fill(*visited, *visited + maze.m()*maze.n(), false);
 
-	// Depart from the source node.
-	std::stack<graph::node*> stack;
-	stack.push(source);
-
-	while (!stack.empty())
+	while (!L.empty())
 	{
-		graph::node& x = *stack.top(); stack.pop();
-		// std::cerr << "visit " << x << "\n"; // %EXECLOG%
+		graph::path p = L.top(); L.pop();
+		graph::node& x = p.last_node(); /*EXECLOG*/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /**/
 
 		if (x == target)
 		{
-			std::stack<graph::node*> path;
-			graph::node* y = &x;
-			do
-			{
-				path.push(y);
-				y = y->trace();
-			}
-			while (y);
-
-			std::cout << "[";
-			bool first = true;
-			while (!path.empty())
-			{
-				y = path.top(); path.pop();
-				std::cout << (first ? "" : ", ") << *y;
-				if (first)
-					first = false;
-			}
-			std::cout << "]\n";
+			std::cout << p << "\n";
 			return 0;
 		}
 
-		if (!x.visited())
+		if (!visited[x.i()][x.j()])
 		{
-			x.visit();
-			for (graph::node* y_addr : graph.adjacent_nodes(x))
-			{
-				graph::node& y = *y_addr;
-				if (!y.visited())
+			visited[x.i()][x.j()] = true;
+			for (graph::node& y : graph.adjacent_nodes(x))
+				if (!visited[y.i()][y.j()])
 				{
-					y.trace(&x);
-					// std::cerr << "y.trace " << *(y.trace()) << "\n"; // %EXECLOG%
-					stack.push(y_addr);
-					// std::cerr << "push " << y << "\n"; // %EXECLOG%
+					graph::path new_path(p); new_path.add_node(y);
+					L.push(new_path);
 				}
-			}
 		}
 	}
 
-	// TODO: no solution found!
-
+	std::cout << "No solutions were found for this maze.\n";
 	return 0;
 }
