@@ -23,7 +23,7 @@ int main()
 	while (!L.empty())
 	{
 		graph::path p = L.top(); L.pop();
-		graph::node& x = p.last_node(); /*EXECLOG*/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /**/
+		graph::node& x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
 
 		if (x == target)
 		{
