@@ -4,6 +4,18 @@
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
 
+void print_std_queue(std::queue<graph::path> _q)
+{
+	std::cout << "{";
+	unsigned int k = _q.size() - 1;
+	while(!_q.empty())
+	{
+		std::cout << _q.front() << (k-- > 0 ? ", " : "");
+		_q.pop();
+	}
+	std::cout << "}";
+}
+
 /**
  * TODO: send execlog to stderr.
  */
@@ -22,6 +34,8 @@ int main()
 
 	while (!L.empty())
 	{
+		print_std_queue(L); std::cout << "\n";
+
 		graph::path p = L.front(); L.pop();
 		graph::node& x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
 
@@ -33,10 +47,12 @@ int main()
 
 		if (!visited[x.i()][x.j()])
 		{
+			std::cout << "visit " << x << "\n";
 			visited[x.i()][x.j()] = true;
 			for (graph::node& y : graph.adjacent_nodes(x))
 				if (!visited[y.i()][y.j()])
 				{
+					std::cout << "discover " << y << "\n";
 					graph::path new_path(p); new_path.add_node(y);
 					L.push(new_path);
 				}

@@ -93,7 +93,7 @@ endif
 
 exec: .bin/$(_ALGORITHM)
 ifeq '$(_N)' '1'
-	@exec .bin/$(_ALGORITHM)
+	exec .bin/$(_ALGORITHM)
 else
 	for i in $$(seq $(_N)); do ./.bin/$(_ALGORITHM) < $(_STDIN) > $(_STDOUT) 2> $(_STDERR); done
 endif
