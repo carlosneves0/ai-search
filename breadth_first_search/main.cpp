@@ -23,7 +23,7 @@ int main()
 	while (!L.empty())
 	{
 		graph::path p = L.front(); L.pop();
-		graph::node& x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
+		graph::node x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
 
 		if (x == target)
 		{
@@ -45,4 +45,10 @@ int main()
 
 	std::cout << "No solutions were found for this maze.\n";
 	return 0;
+}
+
+// Please ignore this h function.
+double h(unsigned int i, unsigned int j)
+{
+	return 0.0;
 }

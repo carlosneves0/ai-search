@@ -26,8 +26,9 @@ public:
 		path(graph::node _initial_node);
 		path(const graph::path& _p);
 		const std::vector<graph::node>& nodes() const;
-		graph::node& last_node();
+		graph::node last_node() const;
 		void add_node(graph::node& _n);
+		friend bool operator<(const graph::path& _r, const graph::path& _l);
 		friend std::ostream& operator<<(std::ostream& _os, const graph::path& _p);
 	private:
 		std::vector<graph::node> _nodes;
