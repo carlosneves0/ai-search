@@ -67,33 +67,53 @@ endif
 
 # if n > 1
 ifneq '$(_N)' '1'
-
 # stdin
 ifdef i
 _STDIN := $(i)
 else
 _STDIN := /dev/null
 endif
-
 # stdout
 ifdef o
 _STDOUT := $(o)
 else
 _STDOUT := /dev/null
 endif
-
 # stderr
 ifdef e
 _STDERR := $(e)
 else
 _STDERR := /dev/null
 endif
-
 endif
 
 exec: .bin/$(_ALGORITHM)
-ifeq '$(_N)' '1'
 	exec .bin/$(_ALGORITHM)
-else
-	for i in $$(seq $(_N)); do ./.bin/$(_ALGORITHM) < $(_STDIN) > $(_STDOUT) 2> $(_STDERR); done
+
+# For debugging.
+_TIMESTAMP := $(shell date '+%Y-%m-%d_%H:%M:%S.%N')
+_MAZE := $(m)
+_execlog: .bin/$(_ALGORITHM)
+	@mkdir -p .execlog
+	@mkdir .execlog/$(_TIMESTAMP)
+	@cp .bin/$(_ALGORITHM) .execlog/$(_TIMESTAMP)/$(_ALGORITHM).binary
+	@cp __mazes__/$(_MAZE).txt .execlog/$(_TIMESTAMP)/stdin
+	cd .execlog/$(_TIMESTAMP) && \
+		./$(_ALGORITHM).binary \
+			< stdin \
+			> stdout \
+			2> stderr; \
+		echo $$? > exit_status
+	@cat .execlog/$(_TIMESTAMP)/stdout
+ifdef _d
+	@echo vvv---+---+---stderr---+---+---vvv
+	@cat .execlog/$(_TIMESTAMP)/stderr
 endif
+
+# TODO: time N EXECUTIONS + average time for each alg for each maze
+# ifeq '$(_N)' '1'
+# 	exec .bin/$(_ALGORITHM)
+# else
+# 	for i in $$(seq $(_N)); do ./.bin/$(_ALGORITHM) < $(_STDIN) > $(_STDOUT) 2> $(_STDERR); done
+# endif
+# 	echo "foo"

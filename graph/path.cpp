@@ -26,22 +26,21 @@ void graph::path::add_node(graph::node& _n)
 	this->_nodes.push_back(_n);
 }
 
-// Global heuristic function h. Defined in userland code.
-extern double h(unsigned int i, unsigned int j);
-
 bool operator<(const graph::path& _r, const graph::path& _l)
 {
 	graph::node l = _l.last_node();
 	graph::node r = _r.last_node();
-	return h(l.i(), l.j()) < h(r.i(), r.j());
+	double fl = g(l.i(), l.j()) + h(l.i(), l.j());
+	double fr = g(r.i(), r.j()) + h(r.i(), r.j());
+	return fl < fr;
 }
 
 std::ostream& operator<<(std::ostream& _os, const graph::path& _p)
 {
 	const std::vector<graph::node>& path = _p.nodes();
 	_os << "[";
-	unsigned int path_length = path.size();
-	for (unsigned int i = 0u; i < path_length; i++)
+	uint path_length = path.size();
+	for (uint i = 0u; i < path_length; i++)
 		_os << path[i] << (i < path_length - 1u ? ", " : "");
 	return _os << "]";
 }

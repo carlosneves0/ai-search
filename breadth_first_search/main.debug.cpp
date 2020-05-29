@@ -7,7 +7,7 @@
 void print_std_queue(std::queue<graph::path> _q)
 {
 	std::cout << "{";
-	unsigned int k = _q.size() - 1;
+	uint k = _q.size() - 1;
 	while(!_q.empty())
 	{
 		std::cout << _q.front() << (k-- > 0 ? ", " : "");

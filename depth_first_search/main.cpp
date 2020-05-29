@@ -1,8 +1,10 @@
+#define __DEPTH_FIRST_SEARCH__
 #include <iostream>
 #include <stack>
 #include <algorithm>
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
+typedef unsigned int uint;
 
 /**
  * TODO: send execlog to stderr.
@@ -47,9 +49,14 @@ int main()
 	return 0;
 }
 
-
-// Please ignore this h function.
-double h(unsigned int i, unsigned int j)
+// These two must be here to be able to link.
+// Cost function g.
+double g(uint i, uint j)
+{
+	return 0.0;
+}
+// Heuristic function h.
+double h(uint i, uint j)
 {
 	return 0.0;
 }

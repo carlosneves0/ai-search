@@ -4,12 +4,12 @@ graph::graph(maze& _m):
 	_maze(_m)
 {
 	// Scan maze and extract all nodes (obstacles aren't nodes).
-	unsigned int m = _m.m();
-	unsigned int n = _m.n();
+	uint m = _m.m();
+	uint n = _m.n();
 	char** maze = _m.matrix();
 	graph::node x;
-	for (unsigned int i = 0u; i < m; i++)
-		for (unsigned int j = 0u; j < n; j++)
+	for (uint i = 0u; i < m; i++)
+		for (uint j = 0u; j < n; j++)
 		{
 			if (maze[i][j] == maze::OBSTACLE)
 				continue;
@@ -43,7 +43,7 @@ graph::node graph::target() const
 std::vector<graph::node> graph::adjacent_nodes(const graph::node& _n) const
 {
 	std::vector<graph::node> adjacent_nodes;
-	unsigned int i = _n.i(), j = _n.j(), m = this->_maze.m(), n = this->_maze.n();
+	uint i = _n.i(), j = _n.j(), m = this->_maze.m(), n = this->_maze.n();
 	maze::position neighbors[] = {{i, j-1}, {i+1, j}, {i, j+1}, {i-1, j}};
 	char** maze = this->_maze.matrix();
 	for (maze::position& p : neighbors)

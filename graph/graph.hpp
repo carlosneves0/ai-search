@@ -1,8 +1,12 @@
 #ifndef __GRAPH_HPP__
 #define __GRAPH_HPP__
-
 #include <vector>
 #include "../maze/maze.hpp"
+typedef unsigned int uint;
+
+// Global cost and heuristic functions g and h. Both defined by the user.
+double g(uint i, uint j);
+double h(uint i, uint j);
 
 class graph {
 public:
@@ -10,14 +14,14 @@ public:
 	public:
 		node();
 		node(const maze::position& _p);
-		unsigned int i() const;
-		void i(unsigned int _i);
-		unsigned int j() const;
-		void j(unsigned int _j);
+		uint i() const;
+		void i(uint _i);
+		uint j() const;
+		void j(uint _j);
 		bool operator==(const graph::node& _n) const;
 		friend std::ostream& operator<<(std::ostream& _os, const graph::node& _n);
 	private:
-		unsigned int _i, _j;
+		uint _i, _j;
 	};
 
 public:
@@ -28,7 +32,9 @@ public:
 		const std::vector<graph::node>& nodes() const;
 		graph::node last_node() const;
 		void add_node(graph::node& _n);
+#if defined(__A_STAR__) || defined(__BEST_FIRST_SEARCH__)
 		friend bool operator<(const graph::path& _r, const graph::path& _l);
+#endif
 		friend std::ostream& operator<<(std::ostream& _os, const graph::path& _p);
 	private:
 		std::vector<graph::node> _nodes;

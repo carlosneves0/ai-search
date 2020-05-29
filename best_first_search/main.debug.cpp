@@ -8,7 +8,7 @@
 void print_std_queue(std::priority_queue<graph::path> _q)
 {
 	std::cerr << "{";
-	unsigned int k = _q.size() - 1;
+	uint k = _q.size() - 1;
 	while(!_q.empty())
 	{
 		std::cerr << _q.top() << (k-- > 0 ? ", " : "");
@@ -18,7 +18,7 @@ void print_std_queue(std::priority_queue<graph::path> _q)
 }
 
 maze* maze_instance = nullptr;
-double h(unsigned int i, unsigned int j)
+double h(uint i, uint j)
 {
 	static maze::position target = (*maze_instance).target();
 	uint ti = target.i, tj = target.j;
@@ -34,7 +34,7 @@ int main()
 	maze maze(std::cin); maze_instance = &maze;
 
 	//---DEBUG
-	typedef unsigned int uint;
+	typedef uint uint;
 	std::cout.precision(1);
 	uint m = maze.m(), n = maze.n();
 	for (uint i = 0u; i < m; i++)

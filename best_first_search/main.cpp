@@ -1,18 +1,26 @@
+#define __BEST_FIRST_SEARCH__
 #include <iostream>
 #include <cmath>
 #include <queue>
 #include <algorithm>
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
+typedef unsigned int uint;
 
 /* Global maze instance */
 maze* maze_instance = nullptr;
 
+// Cost function g.
+double g(uint i, uint j)
+{
+	return 0.0;
+}
+
 /* Greedy Best-First heuristic function h */
-double h(unsigned int i, unsigned int j)
+double h(uint i, uint j)
 {
 	static maze::position target = (*maze_instance).target();
-	unsigned int ti = target.i, tj = target.j;
+	uint ti = target.i, tj = target.j;
 	return std::sqrt(std::pow((double) ti - i, 2.0) + std::pow((double) tj - j, 2.0));
 }
 
@@ -69,10 +77,10 @@ void init_visited()
 {
 	maze& maze = *maze_instance;
 	_visited = new bool*[maze.m()];
-	for (unsigned int i = 0u; i < maze.m(); i++)
+	for (uint i = 0u; i < maze.m(); i++)
 	{
 		_visited[i] = new bool[maze.n()];
-		for (unsigned int j = 0u; j < maze.n(); j++)
+		for (uint j = 0u; j < maze.n(); j++)
 			_visited[i][j] = false;
 	}
 }
