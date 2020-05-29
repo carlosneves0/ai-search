@@ -7,8 +7,19 @@
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
 
-maze* maze_instance = nullptr;
+void print_std_queue(std::priority_queue<graph::path> _q)
+{
+	std::cerr << "{";
+	uint k = _q.size() - 1;
+	while(!_q.empty())
+	{
+		std::cerr << _q.top() << (k-- > 0 ? ", " : "");
+		_q.pop();
+	}
+	std::cerr << "}\n";
+}
 
+maze* maze_instance = nullptr;
 // Which nodes were already visited.
 bool** _visited = nullptr;
 void init_visited();
@@ -29,26 +40,72 @@ double h(uint i, uint j)
 	return std::sqrt(std::pow((double) ti - i, 2.0) + std::pow((double) tj - j, 2.0));
 }
 
+/**
+ * TODO: send execlog to stderr.
+ */
 int main()
 {
 	/* Read and convert stdin into meaningful data structures. */
 	maze maze(std::cin); maze_instance = &maze;
+
+	//---DEBUG
+	// typedef uint uint;
+	std::cerr.precision(1);
+	uint m = maze.m(), n = maze.n();
+	for (uint i = 0u; i < m; i++)
+	{
+		if (i == 0u)
+		{
+			for (uint j = 0u; j < n + 1; j++)
+				if (j == 0u)
+					std::cerr << "    ";
+				else
+				{
+					if (j < 11u)
+						std::cerr << "0";
+					std::cerr << std::fixed << (double) (j-1) << " ";
+				}
+			std::cerr << "\n";
+		}
+		std::cerr << std::fixed << (double) i << " ";
+		for (uint j = 0u; j < n; j++)
+		{
+			if (maze.matrix()[i][j] != maze::OBSTACLE)
+			{
+				double _f = g(i, j) + h(i, j);
+				if (_f < 10)
+					std::cerr << "0";
+				std::cerr << std::fixed << _f << " ";
+			}
+			else
+			{
+				std::cerr << "#### ";
+			}
+		}
+		std::cerr << "\n";
+	}
+	// return 0;
+	//---DEBUG
+
 	graph graph(maze);
 	graph::node source = graph.source();
 	graph::node target = graph.target();
 
-	/* A* Search Algorithm */
+	/* Greedy Best First Search Algorithm */
 	std::priority_queue<graph::path> L;
 	graph::path initial_path(source); L.push(initial_path);
 	init_visited();
 
 	while (!L.empty())
 	{
+		// print_std_queue(L);
+
 		graph::path p = L.top(); L.pop();
-		graph::node x = p.last_node();
+		graph::node x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
 
 		if (!visited(x))
 		{
+			std::cerr << "visit " << x << "\n";
 			visit(x);
 
 			if (x == target)
@@ -60,6 +117,7 @@ int main()
 			for (graph::node& y : graph.adjacent_nodes(x))
 				if (!visited(y))
 				{
+					std::cerr << "discover " << y << "\n";
 					graph::path new_path(p); new_path.add_node(y);
 					L.push(new_path);
 				}

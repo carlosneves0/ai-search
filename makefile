@@ -37,9 +37,10 @@ build: $(addprefix .bin/, $(_SEARCH_ALGORITHMS))
 #
 clean:
 	rm -rf .bin
+	@rm -rf .execlog
 
 ##
-# `make exec a=bfs n=3`
+# `make exec a=bfs m=0`
 #
 # Which algorithm to execute.
 ifndef a
@@ -58,13 +59,46 @@ else
 _ALGORITHM := $(a)
 endif
 
+exec: .bin/$(_ALGORITHM)
+ifndef m
+	@exec .bin/$(_ALGORITHM)
+else
+	@exec .bin/$(_ALGORITHM) < __mazes__/$(m).txt
+endif
+
+## For debugging ##
+##
+# `make _execlog a=bfs m=0`
+#
+_TIMESTAMP := $(shell date '+%Y-%m-%d_%H:%M:%S.%N')
+_execlog: .bin/$(_ALGORITHM)
+	@mkdir -p .execlog
+	@mkdir .execlog/$(_TIMESTAMP)
+	@cp .bin/$(_ALGORITHM) .execlog/$(_TIMESTAMP)/$(_ALGORITHM).binary
+ifndef m
+	@cp __mazes__/0.txt .execlog/$(_TIMESTAMP)/stdin
+else
+	@cp __mazes__/$(m).txt .execlog/$(_TIMESTAMP)/stdin
+endif
+	@cd .execlog/$(_TIMESTAMP) && \
+		./$(_ALGORITHM).binary \
+			< stdin \
+			> stdout \
+			2> stderr; \
+		echo $$? > exit_status
+	@cat .execlog/$(_TIMESTAMP)/stdout
+	@#echo vvv---+---+---stderr---+---+---vvv
+	@#cat .execlog/$(_TIMESTAMP)/stderr
+
+##
+# TODO: time N EXECUTIONS + average time for each alg for each maze
+#
 # How many executions.
 ifndef n
 _N := 1
 else
 _N := $(n)
 endif
-
 # if n > 1
 ifneq '$(_N)' '1'
 # stdin
@@ -86,31 +120,6 @@ else
 _STDERR := /dev/null
 endif
 endif
-
-exec: .bin/$(_ALGORITHM)
-	exec .bin/$(_ALGORITHM)
-
-# For debugging.
-_TIMESTAMP := $(shell date '+%Y-%m-%d_%H:%M:%S.%N')
-_MAZE := $(m)
-_execlog: .bin/$(_ALGORITHM)
-	@mkdir -p .execlog
-	@mkdir .execlog/$(_TIMESTAMP)
-	@cp .bin/$(_ALGORITHM) .execlog/$(_TIMESTAMP)/$(_ALGORITHM).binary
-	@cp __mazes__/$(_MAZE).txt .execlog/$(_TIMESTAMP)/stdin
-	cd .execlog/$(_TIMESTAMP) && \
-		./$(_ALGORITHM).binary \
-			< stdin \
-			> stdout \
-			2> stderr; \
-		echo $$? > exit_status
-	@cat .execlog/$(_TIMESTAMP)/stdout
-ifdef _d
-	@echo vvv---+---+---stderr---+---+---vvv
-	@cat .execlog/$(_TIMESTAMP)/stderr
-endif
-
-# TODO: time N EXECUTIONS + average time for each alg for each maze
 # ifeq '$(_N)' '1'
 # 	exec .bin/$(_ALGORITHM)
 # else

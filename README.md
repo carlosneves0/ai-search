@@ -8,6 +8,8 @@ Implementation of 5 different AI search algorithms:
 - A* (`a_star`)
 - Hill Climbing (`hill_climbing`)
 
+## Mazes
+
 ## Scripts
 
 ### `make` <sub>or `make build`</sub>
@@ -30,10 +32,10 @@ Remove the `.bin` directory and its contents.
 - `a_star` or `as`;
 - `hill_climbing` or `hc`.
 
-E.g. to execute the A* search binary:
+E.g. to execute the A* search binary with the maze with index 0:
 
 ```
-make exec a=a_star
+make exec a=a_star m=0
 ```
 
-#### TODO: `make exec a=a_star n=100 i=maze/0.txt`
+### TODO: `make average a=a_star m=0 n=100`
