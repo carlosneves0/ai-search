@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include <queue>
-#include <algorithm>
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
 typedef unsigned int uint;

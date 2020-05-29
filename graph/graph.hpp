@@ -13,7 +13,9 @@ public:
 	class node {
 	public:
 		node();
+		node(uint _i, uint _j);
 		node(const maze::position& _p);
+		node(const graph::node& _n);
 		uint i() const;
 		void i(uint _i);
 		uint j() const;

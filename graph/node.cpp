@@ -4,8 +4,17 @@ graph::node::node():
 	_i(0), _j(0)
 {}
 
+graph::node::node(uint _i, uint _j):
+	_i(_i), _j(_j)
+{}
+
+
 graph::node::node(const maze::position& _p):
 	_i(_p.i), _j(_p.j)
+{}
+
+graph::node::node(const graph::node& _n):
+	_i(_n.i()), _j(_n.j())
 {}
 
 unsigned int graph::node::i() const

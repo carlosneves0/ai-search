@@ -25,12 +25,50 @@ int main()
 	graph graph(maze);
 	graph::node source = graph.source();
 
+	/*%DEBUG%*/
+	std::cerr.precision(1);
+	uint m = maze.m(), n = maze.n();
+	for (uint i = 0u; i < m; i++)
+	{
+		if (i == 0u)
+		{
+			for (uint j = 0u; j < n + 1; j++)
+				if (j == 0u)
+					std::cerr << "    ";
+				else
+				{
+					if (j < 11u)
+						std::cerr << "0";
+					std::cerr << std::fixed << (double) (j-1) << " ";
+				}
+			std::cerr << "\n";
+		}
+		std::cerr << std::fixed << (double) i << " ";
+		for (uint j = 0u; j < n; j++)
+		{
+			if (maze.matrix()[i][j] != maze::OBSTACLE)
+			{
+				double _f = f(graph::node(i, j));
+				if (_f < 10.0)
+					std::cerr << "0";
+				std::cerr << std::fixed << _f << " ";
+			}
+			else
+			{
+				std::cerr << "#### ";
+			}
+		}
+		std::cerr << "\n";
+	}
+	// return 0;
+	/*%DEBUG%*/
+
 	/* Hill Climbing Search Algorithm */
 	graph::path solution(source);
 	graph::node current = source;
 	while (true)
 	{
-		graph::node next = current;
+		graph::node next = current;/*%EXECLOG%*/std::cerr << "visit " << current << "\n";
 		for (graph::node& neighbor : graph.adjacent_nodes(current))
 			if (f(neighbor) <= f(next))
 				next = neighbor;

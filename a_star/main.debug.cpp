@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include <queue>
-#include <algorithm>
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
@@ -49,7 +48,6 @@ int main()
 	maze maze(std::cin); maze_instance = &maze;
 
 	//---DEBUG
-	// typedef uint uint;
 	std::cerr.precision(1);
 	uint m = maze.m(), n = maze.n();
 	for (uint i = 0u; i < m; i++)
