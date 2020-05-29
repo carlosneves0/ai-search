@@ -1,4 +1,4 @@
-typedef usigned int uint;
+typedef unsigned int uint;
 
 int main()
 {
