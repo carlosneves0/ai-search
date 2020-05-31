@@ -11,7 +11,7 @@ maze* maze_instance = nullptr;
 // Objective function: cartesian distance to target maze position.
 // Optimization problem: minimize h(x).
 // NOTE: hill climbing finds a local minimum.
-double f(graph::node x)
+double f(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
 	uint xi = x.i(), xj = x.j(), ti = target.i, tj = target.j;
@@ -47,11 +47,11 @@ int main()
 }
 
 // These functions are here so the linker can link the graph::path class.
-double g(uint i, uint j)
+double g(graph::node& x)
 {
 	return 0.0;
 }
-double h(uint i, uint j)
+double h(graph::node& x)
 {
 	return 0.0;
 }

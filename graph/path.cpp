@@ -30,8 +30,8 @@ bool operator<(const graph::path& _r, const graph::path& _l)
 {
 	graph::node l = _l.last_node();
 	graph::node r = _r.last_node();
-	double fl = g(l.i(), l.j()) + h(l.i(), l.j());
-	double fr = g(r.i(), r.j()) + h(r.i(), r.j());
+	double fl = g(l) + h(l);
+	double fr = g(r) + h(r);
 	return fl < fr;
 }
 

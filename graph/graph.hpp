@@ -4,10 +4,6 @@
 #include "../maze/maze.hpp"
 typedef unsigned int uint;
 
-// Global cost and heuristic functions g and h. Both defined by the user.
-double g(uint i, uint j);
-double h(uint i, uint j);
-
 class graph {
 public:
 	class node {
@@ -55,5 +51,9 @@ private:
 	graph::node _source;
 	graph::node _target;
 };
+
+// Global cost and heuristic functions g and h. Both defined by the user.
+double g(graph::node& x);
+double h(graph::node& x);
 
 #endif

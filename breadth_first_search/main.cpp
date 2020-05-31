@@ -6,9 +6,6 @@
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
 
-/**
- * TODO: send execlog to stderr.
- */
 int main()
 {
 	/* Read and convert stdin into meaningful data structures. */
@@ -25,7 +22,7 @@ int main()
 	while (!L.empty())
 	{
 		graph::path p = L.front(); L.pop();
-		graph::node x = p.last_node(); /*EXECLOG/ std::cerr << "goto " << x.i() << "," << x.j() << "\n"; /*/
+		graph::node x = p.last_node();
 
 		if (x == target)
 		{
@@ -51,12 +48,12 @@ int main()
 
 // These two must be here to be able to link.
 // Cost function g.
-double g(uint i, uint j)
+double g(graph::node& x)
 {
 	return 0.0;
 }
 // Heuristic function h.
-double h(uint i, uint j)
+double h(graph::node& x)
 {
 	return 0.0;
 }

@@ -9,18 +9,18 @@ typedef unsigned int uint;
 /* Global maze instance */
 maze* maze_instance = nullptr;
 
-// Cost function g.
-double g(uint i, uint j)
+/* Cost function g. */
+double g(graph::node& x)
 {
 	return 0.0;
 }
 
 /* Greedy Best-First heuristic function h */
-double h(uint i, uint j)
+double h(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
-	uint ti = target.i, tj = target.j;
-	return std::sqrt(std::pow((double) ti - i, 2.0) + std::pow((double) tj - j, 2.0));
+	uint ti = target.i, tj = target.j, xi = x.i(), xj = x.j();
+	return std::sqrt(std::pow((double) ti - xi, 2.0) + std::pow((double) tj - xj, 2.0));
 }
 
 // Which nodes were already visited.

@@ -14,18 +14,18 @@ void init_visited();
 bool visited(graph::node& x);
 void visit(graph::node& x);
 
-double g(uint i, uint j)
+double g(graph::node& x)
 {
 	static maze::position source = (*maze_instance).source();
-	uint ti = source.i, tj = source.j;
-	return std::sqrt(std::pow((double) ti - i, 2.0) + std::pow((double) tj - j, 2.0));
+	uint xi = x.i(), xj = x.j(), ti = source.i, tj = source.j;
+	return std::sqrt(std::pow((double) ti - xi, 2.0) + std::pow((double) tj - xj, 2.0));
 }
 
-double h(uint i, uint j)
+double h(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
-	uint ti = target.i, tj = target.j;
-	return std::sqrt(std::pow((double) ti - i, 2.0) + std::pow((double) tj - j, 2.0));
+	uint xi = x.i(), xj = x.j(), ti = target.i, tj = target.j;
+	return std::sqrt(std::pow((double) ti - xi, 2.0) + std::pow((double) tj - xj, 2.0));
 }
 
 int main()
