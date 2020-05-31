@@ -12,19 +12,19 @@ _SEARCH_ALGORITHMS := depth_first_search breadth_first_search \
 build: $(addprefix .bin/, $(_SEARCH_ALGORITHMS))
 
 .bin/%: .bin/%.o .bin/maze.o .bin/graph.o .bin/graph/node.o .bin/graph/path.o | .bin
-	g++ -Wall $(<) .bin/maze.o .bin/graph.o .bin/graph/node.o .bin/graph/path.o -o $(@)
+	g++ -std=c++11 -Wall $(<) .bin/maze.o .bin/graph.o .bin/graph/node.o .bin/graph/path.o -o $(@)
 
 .bin/%.o: %/main.cpp | .bin
-	g++ -c -Wall $(<) -o $(@)
+	g++ -c -std=c++11 -Wall $(<) -o $(@)
 
 .bin/maze.o: maze/maze.cpp maze/maze.hpp | .bin
-	g++ -c -Wall $(<) -o $(@)
+	g++ -c -std=c++11 -Wall $(<) -o $(@)
 
 .bin/graph.o: graph/graph.cpp graph/graph.hpp | .bin
-	g++ -c -Wall $(<) -o $(@)
+	g++ -c -std=c++11 -Wall $(<) -o $(@)
 
 .bin/graph/%.o: graph/%.cpp graph/graph.hpp | .bin/graph
-	g++ -c -Wall $(<) -o $(@)
+	g++ -c -std=c++11 -Wall $(<) -o $(@)
 
 .bin/graph: | .bin
 	mkdir -p .bin/graph
@@ -91,38 +91,48 @@ endif
 	@#cat .execlog/$(_TIMESTAMP)/stderr
 
 ##
-# TODO: time N EXECUTIONS + average time for each alg for each maze
+# `make benchmark n=1000`
 #
-# How many executions.
+##
+# parameter `n`
+# How many executions for each algorithm with each maze (default = 100).
 ifndef n
-_N := 1
+_N := 100
 else
 _N := $(n)
 endif
-# if n > 1
-ifneq '$(_N)' '1'
-# stdin
-ifdef i
-_STDIN := $(i)
-else
-_STDIN := /dev/null
-endif
-# stdout
-ifdef o
-_STDOUT := $(o)
-else
-_STDOUT := /dev/null
-endif
-# stderr
-ifdef e
-_STDERR := $(e)
-else
-_STDERR := /dev/null
-endif
-endif
-# ifeq '$(_N)' '1'
-# 	exec .bin/$(_ALGORITHM)
-# else
-# 	for i in $$(seq $(_N)); do ./.bin/$(_ALGORITHM) < $(_STDIN) > $(_STDOUT) 2> $(_STDERR); done
-# endif
-# 	echo "foo"
+
+benchmark: build
+	@# Benchmark all algorithms in all mazes.
+	@echo 'benchmark::n = $(_N)'
+	@rm -rf .benchmark; mkdir -p .benchmark
+	@for algorithm in $(_SEARCH_ALGORITHMS); do \
+		mkdir -p .benchmark/$$algorithm; \
+		for maze in $(shell ls __mazes__ | xargs basename --suffix .txt); do \
+			mkdir -p .benchmark/$$algorithm/$$maze; \
+			for i in $$(seq $(_N)); do \
+				echo "benchmark(algorithm = $$algorithm, maze = $$maze, i = $$i)"; \
+				start=$$(date +%s.%N); \
+				./.bin/$$algorithm < __mazes__/$$maze.txt &> /dev/null; \
+				exit_status=$$?; \
+				echo "$$exit_status" > .benchmark/$$algorithm/$$maze/$$i.exit_status; \
+				seconds=$$(awk "BEGIN { print $$(date +%s.%N) - $$start }"); \
+				echo "$$seconds" > .benchmark/$$algorithm/$$maze/$$i.seconds; \
+				echo "<<< $${seconds}s"; \
+			done \
+		done \
+	done
+
+	@# Compute the average execution time for each algortihm in each maze.
+	@echo "--- AVERAGE TIMES (in seconds) ---"
+	@for a in $$(ls .benchmark); do \
+		for m in $$(ls .benchmark/$$a); do \
+			sum='0.0'; \
+			for i in $$(seq $(_N)); do \
+				sum=$$(awk "BEGIN { print $$sum + $$(cat .benchmark/$$a/$$m/$$i.seconds) }"); \
+			done; \
+			average=$$(awk "BEGIN { print $$sum / $(_N) }"); \
+			echo "$$average" > .benchmark/$$a/$$m/average; \
+			echo "$$a @ maze #$$m = $${average}s"; \
+		done \
+	done \

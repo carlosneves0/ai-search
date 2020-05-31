@@ -41,9 +41,14 @@ int main()
 			solution.add_node(current = next);
 	}
 
-	std::cout << solution << "\n";
+	if (solution.last_node() == graph.target())
+	{
+		std::cout << solution << "\n";
+		return 0;
+	}
 
-	return 0;
+	std::cout << "No solutions were found for this maze.\n";
+	return 1;
 }
 
 // These functions are here so the linker can link the graph::path class.

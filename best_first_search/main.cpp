@@ -69,7 +69,7 @@ int main()
 	}
 
 	std::cout << "No solutions were found for this maze.\n";
-	return 0;
+	return 1;
 }
 
 void init_visited()

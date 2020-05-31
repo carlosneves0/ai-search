@@ -43,7 +43,7 @@ int main()
 	}
 
 	std::cout << "No solutions were found for this maze.\n";
-	return 0;
+	return 1;
 }
 
 // These two must be here to be able to link.

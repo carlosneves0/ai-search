@@ -66,7 +66,7 @@ int main()
 	}
 
 	std::cout << "No solutions were found for this maze.\n";
-	return 0;
+	return 1;
 }
 
 // TODO: put these visited things inside the graph class.
