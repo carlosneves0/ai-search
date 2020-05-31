@@ -135,4 +135,4 @@ benchmark: build
 			echo "$$average" > .benchmark/$$a/$$m/average; \
 			echo "$$a @ maze #$$m = $${average}s"; \
 		done \
-	done \
+	done
