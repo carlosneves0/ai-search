@@ -1,0 +1,21 @@
+.MazeSquare-OutterWall-monokai {
+  background: #222;
+}
+.MazeSquare-Pathway-monokai {
+  background: #e6e6e6;
+}
+.MazeSquare-VisitedPathway-monokai {
+  background: #9e86c8;
+}
+
+.MazeSquare-Obstacle-monokai {
+  background: #797979;
+}
+
+.MazeSquare-Current-monokai {
+  background: #b05279;
+}
+
+.MazeSquare-Target-monokai {
+  background: #e87d3e;
+}
