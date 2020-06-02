@@ -38,6 +38,7 @@ function MazeSquare({ data, side, theme }) {
   const MAZE_OBSTACLE = '-'
   const MAZE_CURRENT = '#'
   const MAZE_TARGET = '$'
+  const MAZE_HIGHLIGHT = '!'
 
   switch (data) {
     case MAZE_OUTTER_WALL:
@@ -52,6 +53,8 @@ function MazeSquare({ data, side, theme }) {
       return <span className={`MazeSquare MazeSquare-Current-${theme}`} />
     case MAZE_TARGET:
       return <span className={`MazeSquare MazeSquare-Target-${theme}`} />
+    case MAZE_HIGHLIGHT:
+      return <span className={`MazeSquare MazeSquare-Highlight-${theme}`} />
     default:
       return null
   }

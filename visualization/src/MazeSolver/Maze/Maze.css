@@ -29,9 +29,16 @@
 }
 
 .MazeSquare-Current-monokai {
-  background: #b05279;
+  /* background: #b05279; */
+  background: #f92672;
 }
 
 .MazeSquare-Target-monokai {
-  background: #e87d3e;
+  /* background: #e87d3e; */
+  background: #ffac0e;
+}
+
+.MazeSquare-Highlight-monokai {
+  /* background: #b4d273; */
+  background: #a6e22e;
 }

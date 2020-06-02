@@ -7,7 +7,7 @@ import execlogs from '../execlogs'
 const MAZE = 0
 const ALGORITHM = 'a_star'
 const THEME = 'monokai'
-const FIRE_INTERVAL = 20
+const FIRE_INTERVAL = 10
 
 const initialMaze = mazes[MAZE]
 
@@ -23,6 +23,10 @@ export default function MazeSolver() {
       () => handleNewEvent(fireNewEvent()),
       FIRE_INTERVAL
     ))
+  }, [])
+
+  useEffect(() => {
+    document.title = algorithmPrettyName(ALGORITHM)
   }, [])
 
   function handleNewEvent(event) {
@@ -86,7 +90,9 @@ function visit(maze, next) {
 
 function succeed(maze, path) {
   const newMaze = cloneDeep(maze)
-  // TODO: highlight path
+  for (const [i, j] of path) {
+    newMaze.data[i][j] = '!'
+  }
   return newMaze
 }
 
@@ -94,4 +100,21 @@ function fail(maze, path) {
   const newMaze = cloneDeep(maze)
   // TODO: highlight path
   return newMaze
+}
+
+function algorithmPrettyName(algorithm) {
+  switch (algorithm) {
+    case 'depth_first_search':
+      return 'Depth First Search'
+    case 'breadth_first_search':
+      return 'Breadth First Search'
+    case 'best_first_search':
+      return 'Best First Search'
+    case 'a_star':
+      return 'A*'
+    case 'hill_climbing':
+      return 'Hill Climbing'
+    default:
+      throw new Error(`Unknown algorithm "${algorithm}"`)
+  }
 }
