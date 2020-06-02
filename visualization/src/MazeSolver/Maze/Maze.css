@@ -1,10 +1,26 @@
+.MazeRow {
+  margin: 0 auto;
+  width: fit-content;
+  height: calc(100vh / 31);
+}
+
+.MazeSquare {
+  /* height: side,
+  width: side, */
+  width: calc(100vh / 31);
+  height: calc(100vh / 31);
+  display: inline-block;
+  border: 1px dashed #fff;
+  box-sizing: border-box;
+}
+
 .MazeSquare-OutterWall-monokai {
   background: #222;
 }
 .MazeSquare-Pathway-monokai {
   background: #e6e6e6;
 }
-.MazeSquare-VisitedPathway-monokai {
+.MazeSquare-Visited-monokai {
   background: #9e86c8;
 }
 
