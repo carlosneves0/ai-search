@@ -49,5 +49,19 @@ std::ostream& operator<<(std::ostream& _os, const graph::path& _p)
 	uint path_length = path.size();
 	for (uint i = 0u; i < path_length; i++)
 		_os << path[i] << (i < path_length - 1u ? ", " : "");
+
+	/*%EXECLOG%*/
+	std::cerr << "succeed [";
+	for (uint i = 0u; i < path_length; i++)
+	{
+		const graph::node& n = path[i];
+		std::cerr << "[" << n.i() << "," << n.j() << "]";
+		if (i < path_length - 1u) {
+			std::cerr << ",";
+		}
+	}
+	std::cerr << "]\n";
+	/*%EXECLOG%*/
+
 	return _os << "]";
 }

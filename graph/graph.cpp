@@ -1,3 +1,4 @@
+#include <iostream>
 #include "graph.hpp"
 
 graph::graph(maze& _m):

@@ -4,10 +4,10 @@ import Maze from './Maze'
 import './MazeSolver.css'
 import mazes from '../mazes'
 import execlogs from '../execlogs'
-const MAZE = 0
+const MAZE = 1
 const ALGORITHM = 'a_star'
 const THEME = 'monokai'
-const FIRE_INTERVAL = 300
+const FIRE_INTERVAL = 5
 
 const initialMaze = mazes[MAZE]
 

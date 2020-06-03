@@ -37,6 +37,45 @@ int main()
 	graph::node source = graph.source();
 	graph::node target = graph.target();
 
+	//---DEBUG
+	std::cerr.precision(1);
+	uint m = maze.m(), n = maze.n();
+	for (uint i = 0u; i < m; i++)
+	{
+		if (i == 0u)
+		{
+			for (uint j = 0u; j < n + 1; j++)
+				if (j == 0u)
+					std::cerr << "    ";
+				else
+				{
+					if (j < 11u)
+						std::cerr << "0";
+					std::cerr << std::fixed << (double) (j-1) << " ";
+				}
+			std::cerr << "\n";
+		}
+		std::cerr << std::fixed << (double) i << " ";
+		for (uint j = 0u; j < n; j++)
+		{
+			if (maze.matrix()[i][j] != maze::OBSTACLE)
+			{
+				graph::node n(i, j);
+				double _f = g(n) + h(n);
+				if (_f < 10)
+					std::cerr << "0";
+				std::cerr << std::fixed << _f << " ";
+			}
+			else
+			{
+				std::cerr << "#### ";
+			}
+		}
+		std::cerr << "\n";
+	}
+	return 0;
+	//---DEBUG
+
 	/* A* Search Algorithm */
 	std::priority_queue<graph::path> L;
 	graph::path initial_path(source); L.push(initial_path);

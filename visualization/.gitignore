@@ -24,4 +24,4 @@ yarn-error.log*
 
 /.tmp
 /src/mazes
-/src/execlogs
+/src/execlogs.json
