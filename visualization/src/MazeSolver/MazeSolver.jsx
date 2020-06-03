@@ -7,7 +7,7 @@ import execlogs from '../execlogs'
 const MAZE = 0
 const ALGORITHM = 'a_star'
 const THEME = 'monokai'
-const FIRE_INTERVAL = 10
+const FIRE_INTERVAL = 300
 
 const initialMaze = mazes[MAZE]
 
