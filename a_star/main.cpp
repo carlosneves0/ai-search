@@ -6,14 +6,12 @@
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
 
+/* Global maze instance */
 maze* maze_instance = nullptr;
 
-// Which nodes were already visited.
-bool** _visited = nullptr;
-void init_visited();
-bool visited(graph::node& x);
-void visit(graph::node& x);
-
+/** Cost function g(x)
+ * g(x) is the linear distance from source to x.
+ */
 double g(graph::node& x)
 {
 	static maze::position source = (*maze_instance).source();
@@ -21,6 +19,9 @@ double g(graph::node& x)
 	return std::sqrt(std::pow((double) ti - xi, 2.0) + std::pow((double) tj - xj, 2.0));
 }
 
+/** Heuristic function h(x)
+ * h(x) is the linear distance from x to target.
+ */
 double h(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
@@ -39,16 +40,15 @@ int main()
 	/* A* Search Algorithm */
 	std::priority_queue<graph::path> L;
 	graph::path initial_path(source); L.push(initial_path);
-	init_visited();
 
 	while (!L.empty())
 	{
 		graph::path p = L.top(); L.pop();
 		graph::node x = p.last_node();
 
-		if (!visited(x))
+		if (!graph.was_visited(x))
 		{
-			visit(x);
+			graph.visit(x);
 
 			if (x == target)
 			{
@@ -57,9 +57,9 @@ int main()
 			}
 
 			for (graph::node& y : graph.adjacent_nodes(x))
-				if (!visited(y))
+				if (!graph.was_visited(y))
 				{
-					graph::path new_path(p); new_path.add_node(y);
+					graph::path new_path(p, y);
 					L.push(new_path);
 				}
 		}
@@ -67,27 +67,4 @@ int main()
 
 	std::cout << "No solutions were found for this maze.\n";
 	return 1;
-}
-
-// TODO: put these visited things inside the graph class.
-void init_visited()
-{
-	maze& maze = *maze_instance;
-	_visited = new bool*[maze.m()];
-	for (uint i = 0u; i < maze.m(); i++)
-	{
-		_visited[i] = new bool[maze.n()];
-		for (uint j = 0u; j < maze.n(); j++)
-			_visited[i][j] = false;
-	}
-}
-
-bool visited(graph::node& x)
-{
-	return _visited[x.i()][x.j()];
-}
-
-void visit(graph::node& x)
-{
-	_visited[x.i()][x.j()] = true;
 }

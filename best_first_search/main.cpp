@@ -9,13 +9,15 @@ typedef unsigned int uint;
 /* Global maze instance */
 maze* maze_instance = nullptr;
 
-/* Cost function g. */
+/* Cost function g(x) */
 double g(graph::node& x)
 {
 	return 0.0;
 }
 
-/* Greedy Best-First heuristic function h */
+/** Heuristic function h(x)
+ * h(x) is the linear distance from x to target.
+ */
 double h(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
@@ -23,22 +25,13 @@ double h(graph::node& x)
 	return std::sqrt(std::pow((double) ti - xi, 2.0) + std::pow((double) tj - xj, 2.0));
 }
 
-// Which nodes were already visited.
-bool** _visited = nullptr;
-void init_visited();
-bool visited(graph::node& x);
-void visit(graph::node& x);
-
 int main()
 {
 	/* Read and convert stdin into meaningful data structures. */
 	maze maze(std::cin); maze_instance = &maze;
-
 	graph graph(maze);
-
-	graph::node source = graph.source(), target = graph.target();
-
-	init_visited();
+	graph::node source = graph.source();
+	graph::node target = graph.target();
 
 	/* Greedy Best First Search Algorithm */
 	std::priority_queue<graph::path> L;
@@ -49,9 +42,9 @@ int main()
 		graph::path p = L.top(); L.pop();
 		graph::node x = p.last_node();
 
-		if (!visited(x))
+		if (!graph.was_visited(x))
 		{
-			visit(x);
+			graph.visit(x);
 
 			if (x == target)
 			{
@@ -60,9 +53,9 @@ int main()
 			}
 
 			for (graph::node& y : graph.adjacent_nodes(x))
-				if (!visited(y))
+				if (!graph.was_visited(y))
 				{
-					graph::path new_path(p); new_path.add_node(y);
+					graph::path new_path(p, y);
 					L.push(new_path);
 				}
 		}
@@ -70,26 +63,4 @@ int main()
 
 	std::cout << "No solutions were found for this maze.\n";
 	return 1;
-}
-
-void init_visited()
-{
-	maze& maze = *maze_instance;
-	_visited = new bool*[maze.m()];
-	for (uint i = 0u; i < maze.m(); i++)
-	{
-		_visited[i] = new bool[maze.n()];
-		for (uint j = 0u; j < maze.n(); j++)
-			_visited[i][j] = false;
-	}
-}
-
-bool visited(graph::node& x)
-{
-	return _visited[x.i()][x.j()];
-}
-
-void visit(graph::node& x)
-{
-	_visited[x.i()][x.j()] = true;
 }

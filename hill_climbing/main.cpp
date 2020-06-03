@@ -6,11 +6,12 @@
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
 
+/* Global maze instance */
 maze* maze_instance = nullptr;
 
-// Objective function: cartesian distance to target maze position.
-// Optimization problem: minimize h(x).
-// NOTE: hill climbing finds a local minimum.
+/** Objective function f(x)
+ * f(x) is the linear distance from x to target.
+ */
 double f(graph::node& x)
 {
 	static maze::position target = (*maze_instance).target();
@@ -24,12 +25,18 @@ int main()
 	maze maze(std::cin); maze_instance = &maze;
 	graph graph(maze);
 	graph::node source = graph.source();
+	graph::node target = graph.target();
 
-	/* Hill Climbing Search Algorithm */
+	/** Hill Climbing Search Algorithm
+	 * Hill Climbing optimization problem: minimize objective function f(x).
+	 * NOTE: hill climbing finds a local minimum.
+	 */
 	graph::path solution(source);
 	graph::node current = source;
 	while (true)
 	{
+		graph.visit(current);
+
 		graph::node next = current;
 		for (graph::node& neighbor : graph.adjacent_nodes(current))
 			if (f(neighbor) <= f(next))
@@ -41,7 +48,7 @@ int main()
 			solution.add_node(current = next);
 	}
 
-	if (solution.last_node() == graph.target())
+	if (solution.last_node() == target)
 	{
 		std::cout << solution << "\n";
 		return 0;
@@ -51,11 +58,13 @@ int main()
 	return 1;
 }
 
-// These functions are here so the linker can link the graph::path class.
+/* Cost function g(x) (UNUSED IN THIS CODE; SAFE TO IGNORE) */
 double g(graph::node& x)
 {
 	return 0.0;
 }
+
+/* Heuristic function h(x) (UNUSED IN THIS CODE; SAFE TO IGNORE) */
 double h(graph::node& x)
 {
 	return 0.0;

@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := build
-.PHONY: build clean exec benchmark execlogs
+.PHONY: build clean exec benchmark visualization execlogs mazes2js execlogs2js
 .PRECIOUS: .bin/%.o .bin/graph/%.o
 
 ##
@@ -68,8 +68,8 @@ endif
 
 exec: .bin/$(_ALGORITHM)
 	-@test '$(_MAZE)' == '' \
-		&& exec .bin/$(_ALGORITHM) \
-		|| exec .bin/$(_ALGORITHM) < __mazes__/$(_MAZE).txt
+		&& exec .bin/$(_ALGORITHM) 2> /dev/null \
+		|| exec .bin/$(_ALGORITHM) < __mazes__/$(_MAZE).txt 2> /dev/null
 
 ##
 # `make benchmark n=1000`
@@ -90,9 +90,35 @@ benchmark: build
 		bash __scripts__/benchmark.bash
 
 ##
+# `make visualization`
+# Start the visualization frontend.
+##
+visualization: mazes2js execlogs2js
+	@cd visualization && yarn start
+
+##
 # `make execlogs`
 # Generate and persist the execution logs for each algorithm in each maze.
 ##
 execlogs: build
 	@export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
 		bash __scripts__/execlogs.bash
+
+##
+# `make mazes2js`
+# Convert each maze to a Javascript representation.
+##
+mazes2js:
+	@node __scripts__/mazes2js.js
+
+##
+# `make execlogs2js`
+# Convert execlogs to a Javascript representation (**only the latest timestamp**).
+##
+execlogs2js: execlogs
+	@node __scripts__/execlogs2js.js
+
+_diff:
+	@export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
+		export TIMESTAMP='$(t)' && \
+		bash __scripts__/.diff.bash

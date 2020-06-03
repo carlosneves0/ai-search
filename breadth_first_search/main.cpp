@@ -1,7 +1,6 @@
 #define __BREADTH_FIRST_SEARCH__
 #include <iostream>
-#include <queue>
-#include <algorithm>
+#include <list>
 #include "../maze/maze.hpp"
 #include "../graph/graph.hpp"
 typedef unsigned int uint;
@@ -15,29 +14,29 @@ int main()
 	graph::node target = graph.target();
 
 	/* Breadth First Search Algorithm */
-	std::queue<graph::path> L;
-	graph::path initial_path(source); L.push(initial_path);
-	bool visited[maze.m()][maze.n()]; std::fill(*visited, *visited + maze.m()*maze.n(), false);
+	std::list<graph::path> L;
+	graph::path initial_path(source); L.push_back(initial_path);
 
 	while (!L.empty())
 	{
-		graph::path p = L.front(); L.pop();
+		graph::path p = L.front(); L.pop_front();
 		graph::node x = p.last_node();
 
-		if (x == target)
+		if (!graph.was_visited(x))
 		{
-			std::cout << p << "\n";
-			return 0;
-		}
+			graph.visit(x);
 
-		if (!visited[x.i()][x.j()])
-		{
-			visited[x.i()][x.j()] = true;
+			if (x == target)
+			{
+				std::cout << p << "\n";
+				return 0;
+			}
+
 			for (graph::node& y : graph.adjacent_nodes(x))
-				if (!visited[y.i()][y.j()])
+				if (!graph.was_visited(y))
 				{
-					graph::path new_path(p); new_path.add_node(y);
-					L.push(new_path);
+					graph::path new_path(p, y);
+					L.push_back(new_path);
 				}
 		}
 	}
@@ -46,13 +45,13 @@ int main()
 	return 1;
 }
 
-// These two must be here to be able to link.
-// Cost function g.
+/* Cost function g(x) (UNUSED IN THIS CODE; SAFE TO IGNORE) */
 double g(graph::node& x)
 {
 	return 0.0;
 }
-// Heuristic function h.
+
+/* Heuristic function h(x) (UNUSED IN THIS CODE; SAFE TO IGNORE) */
 double h(graph::node& x)
 {
 	return 0.0;

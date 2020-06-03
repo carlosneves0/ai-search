@@ -1,6 +1,6 @@
 #include "graph.hpp"
 
-graph::path::path(graph::node _initial_node)
+graph::path::path(graph::node& _initial_node)
 {
 	this->_nodes.push_back(_initial_node);
 }
@@ -9,6 +9,13 @@ graph::path::path(const graph::path& _p)
 {
 	for (graph::node x : _p.nodes())
 		this->_nodes.push_back(x);
+}
+
+graph::path::path(const graph::path& _p, graph::node& _new_node)
+{
+	for (graph::node x : _p.nodes())
+		this->_nodes.push_back(x);
+	this->_nodes.push_back(_new_node);
 }
 
 const std::vector<graph::node>& graph::path::nodes() const

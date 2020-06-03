@@ -65,7 +65,7 @@ function initialSquare(maze) {
   throw new Error('Invalid maze has no initial square')
 }
 
-const execlog = execlogs[MAZE][ALGORITHM]
+const execlog = execlogs[ALGORITHM][MAZE]
 let offset = 0
 function fireNewEvent() {
   if (offset < execlog.length) {
