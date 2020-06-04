@@ -50,7 +50,8 @@ int main()
 
 	/* A* Search Algorithm */
 	std::priority_queue<graph::path> L;
-	graph::path initial_path(source); L.push(initial_path);
+	graph::path initial_path(source);
+	L.push(initial_path); add_path_to_cost_matrix(source, initial_path);
 
 	while (!L.empty())
 	{
@@ -60,7 +61,6 @@ int main()
 		if (!graph.was_visited(x))
 		{
 			graph.visit(x);
-			add_path_to_cost_matrix(x, p);
 
 			if (x == target)
 			{
@@ -73,8 +73,7 @@ int main()
 				if (!graph.was_visited(y))
 				{
 					graph::path new_path(p, y);
-					add_path_to_cost_matrix(y, new_path);
-					L.push(new_path);
+					L.push(new_path); add_path_to_cost_matrix(y, new_path);
 				}
 		}
 	}
