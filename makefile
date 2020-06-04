@@ -93,7 +93,7 @@ benchmark: build
 # `make visualization`
 # Start the visualization frontend.
 ##
-visualization: mazes2js execlogs2js
+visualization: mazes2js execlogs2js visualization/node_modules/.installed
 	@cd visualization && yarn start
 
 ##
@@ -118,6 +118,13 @@ mazes2js:
 execlogs2js: execlogs
 	@node __scripts__/execlogs2js.js
 
+visualization/node_modules/.installed:
+	cd visualization && yarn install --pure-lockfile
+	touch visualization/node_modules/.installed
+
+##
+# For debugging
+##
 _diff:
 	@export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
 		export TIMESTAMP='$(t)' && \

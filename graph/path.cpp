@@ -33,6 +33,11 @@ void graph::path::add_node(graph::node& _n)
 	this->_nodes.push_back(_n);
 }
 
+uint graph::path::length() const
+{
+	return this->_nodes.size() - 1;
+}
+
 bool operator<(const graph::path& _r, const graph::path& _l)
 {
 	graph::node l = _l.last_node();

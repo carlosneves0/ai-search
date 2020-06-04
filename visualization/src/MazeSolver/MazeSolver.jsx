@@ -4,10 +4,11 @@ import Maze from './Maze'
 import './MazeSolver.css'
 import mazes from '../mazes'
 import execlogs from '../execlogs'
-const MAZE = 1
-const ALGORITHM = 'a_star'
+const MAZE = 0
+const ALGORITHMS = ['depth_first_search', 'breadth_first_search', 'best_first_search', 'a_star', 'hill_climbing']
+const ALGORITHM = ALGORITHMS[3]
 const THEME = 'monokai'
-const FIRE_INTERVAL = 5
+const FIRE_INTERVAL = 1
 
 const initialMaze = mazes[MAZE]
 
@@ -31,7 +32,6 @@ export default function MazeSolver() {
 
   function handleNewEvent(event) {
     // Update the maze according to each event type.
-    // console.log(maze.data[1].join(''))
     switch (event.type) {
       case 'visit':
         return setMaze(prevMaze => visit(prevMaze, event.square))
@@ -81,7 +81,6 @@ function visit(maze, next) {
   }
   newData[maze.at[0]][maze.at[1]] = '@'
   newData[next[0]][next[1]] = '#'
-  console.log(newData[1])
   return {
     data: newData,
     at: next
@@ -93,12 +92,15 @@ function succeed(maze, path) {
   for (const [i, j] of path) {
     newMaze.data[i][j] = '!'
   }
+  console.log(path.length)
   return newMaze
 }
 
 function fail(maze, path) {
   const newMaze = cloneDeep(maze)
-  // TODO: highlight path
+  for (const [i, j] of path) {
+    newMaze.data[i][j] = '_'
+  }
   return newMaze
 }
 

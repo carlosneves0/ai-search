@@ -43,7 +43,10 @@ int main()
 				next = neighbor;
 
 		if (next == current)
+		{
+			solution.add_node(next);
 			break;
+		}
 		else
 			solution.add_node(current = next);
 	}
@@ -53,6 +56,19 @@ int main()
 		std::cout << solution << "\n";
 		return 0;
 	}
+
+	/*%EXECLOG%*/
+	std::cerr << "fail [";
+	for (uint i = 0u; i < solution.length(); i++)
+	{
+		const graph::node& n = solution.nodes()[i];
+		std::cerr << "[" << n.i() << "," << n.j() << "]";
+		if (i < solution.length() - 1u) {
+			std::cerr << ",";
+		}
+	}
+	std::cerr << "]\n";
+	/*%EXECLOG%*/
 
 	std::cout << "No solutions were found for this maze.\n";
 	return 1;

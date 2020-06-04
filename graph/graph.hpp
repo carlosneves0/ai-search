@@ -31,6 +31,7 @@ public:
 		const std::vector<graph::node>& nodes() const;
 		graph::node last_node() const;
 		void add_node(graph::node& _n);
+		uint length() const;
 #if defined(__A_STAR__) || defined(__BEST_FIRST_SEARCH__)
 		friend bool operator<(const graph::path& _r, const graph::path& _l);
 #endif
