@@ -4,74 +4,149 @@ import Maze from './Maze'
 import './MazeSolver.css'
 import mazes from '../mazes'
 import execlogs from '../execlogs'
-const MAZE = 0
 const ALGORITHMS = ['depth_first_search', 'breadth_first_search', 'best_first_search', 'a_star', 'hill_climbing']
-const ALGORITHM = ALGORITHMS[3]
 const THEME = 'monokai'
-const FIRE_INTERVAL = 1
-
-const initialMaze = mazes[MAZE]
+const DEFAULT_MAZE_INDEX = 0
+const DEFAULT_ALGORITHM = ALGORITHMS[0]
+const DEFAULT_FIRE_INTERVAL = 20 // ms. Browsers appearently have a 4ms minimum interval.
+let execlogOffset = 0
+let execlogInterval = null
 
 export default function MazeSolver() {
-  const [interval, _setInterval] = useState(null)
-  const [maze, setMaze] = useState({
-    data: initialMaze,
-    at: initialSquare(initialMaze)
+  const [mazeIndex, setMazeIndex] = useState(DEFAULT_MAZE_INDEX)
+  const [algorithm, setAlgorithm] = useState(DEFAULT_ALGORITHM)
+  const [fireInterval, setFireInterval] = useState(DEFAULT_FIRE_INTERVAL)
+  const [maze, setMaze] = useState(initialMaze(mazes[mazeIndex]))
+  const [execlog, setExeclog] = useState(execlogs[algorithm][mazeIndex])
+  const [path, setPath] = useState(null)
+
+  useEffect(() => {
+    document.title = algorithmPrettyName(algorithm)
+  }, [algorithm])
+
+  // const execlog = execlogs[ALGORITHM][MAZE]
+  // let offset = 0
+  function fireNewEvent() {
+    if (execlogOffset < execlog.length) {
+      return execlog[execlogOffset++]
+    }
+    return { type: 'halt' }
+  }
+
+  useEffect(() => {
+    function handleNewEvent(event) {
+      // Update the maze according to each event type.
+      switch (event.type) {
+        case 'visit':
+          return setMaze(prevMaze => visit(prevMaze, event.square))
+        case 'succeed':
+          setMaze(prevMaze => succeed(prevMaze, event.path))
+          setPath(event.path)
+          return
+        case 'fail':
+          setMaze(prevMaze => fail(prevMaze, event.path))
+          setPath(event.path)
+          return
+        case 'halt':
+          clearInterval(execlogInterval)
+          execlogInterval = null
+          return
+        default:
+      }
+    }
+    execlogInterval = setInterval(
+      () => handleNewEvent(fireNewEvent()),
+      fireInterval
+    )
+    return () => {
+      if (execlogInterval !== null) {
+        clearInterval(execlogInterval)
+      }
+    }
   })
 
   useEffect(() => {
-    _setInterval(setInterval(
-      () => handleNewEvent(fireNewEvent()),
-      FIRE_INTERVAL
-    ))
-  }, [])
+    clearInterval(execlogInterval)
+    execlogOffset = 0
+    setExeclog(execlogs[algorithm][mazeIndex])
+    setMaze(initialMaze(mazes[mazeIndex]))
+    setPath(null)
+  }, [algorithm, mazeIndex])
 
-  useEffect(() => {
-    document.title = algorithmPrettyName(ALGORITHM)
-  }, [])
+  function handleSelectMazeIndex(event) {
+    setMazeIndex(event.target.value)
+  }
 
-  function handleNewEvent(event) {
-    // Update the maze according to each event type.
-    switch (event.type) {
-      case 'visit':
-        return setMaze(prevMaze => visit(prevMaze, event.square))
-      case 'succeed':
-        return setMaze(prevMaze => succeed(prevMaze, event.path))
-      case 'fail':
-        return setMaze(prevMaze => fail(prevMaze, event.path))
-      case 'halt':
-        return clearInterval(interval)
-    }
+  function handleSelectAlgorithm(event) {
+    setAlgorithm(event.target.value)
+  }
+
+  function handleFireIntervalChange(event) {
+    setFireInterval(event.target.value)
   }
 
   return (
-    <div className={`MazeSolver MazeSolver-${THEME}`}>
-      <Maze
-        maze={maze.data}
-        theme={THEME}
-      />
-    </div>
+    <>
+      <div className={`MazeSolver-Content MazeSolver-Content-${THEME}`}>
+        <Maze
+          maze={maze.data}
+          theme={THEME}
+        />
+      </div>
+      {path !== null && (
+        <div className={`MazeSolver-PathLength`}>
+          {path.length - 1}
+        </div>
+      )}
+      <div className={`MazeSolver-Controls MazeSolver-Controls-${THEME}`}>
+        <select
+          value={mazeIndex}
+          onChange={handleSelectMazeIndex}
+        >
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => (
+            <option key={i} value={i}>maze #{i}</option>
+          ))}
+        </select>
+        <select
+          value={algorithm}
+          onChange={handleSelectAlgorithm}
+        >
+          {ALGORITHMS.map(a => (
+            <option key={a} value={a}>{algorithmPrettyName(a)}</option>
+          ))}
+        </select>
+        <input
+          type='number'
+          min={0}
+          placeholder='interval'
+          value={fireInterval}
+          onChange={handleFireIntervalChange}
+        />
+      </div>
+    </>
   )
 }
 
-function initialSquare(maze) {
-  for (let i = 0; i < maze.length; i++) {
-    for (let j = 0; j < maze[i].length; j++) {
-      if (maze[i][j] === '#') {
-        return [i, j]
+function initialMaze(maze) {
+  const data = cloneDeep(maze)
+  let at = null
+  for (let i = 0; i < data.length; i++) {
+    for (let j = 0; j < data[i].length; j++) {
+      if (data[i][j] === '#') {
+        at = [i, j]
+      } else if (data[i][j] === '@') {
+        data[i][j] = '*'
+      } else if (data[i][j] === '!') {
+        data[i][j] = '*'
+      } else if (data[i][j] === '_') {
+        data[i][j] = '*'
       }
     }
   }
-  throw new Error('Invalid maze has no initial square')
-}
-
-const execlog = execlogs[ALGORITHM][MAZE]
-let offset = 0
-function fireNewEvent() {
-  if (offset < execlog.length) {
-    return execlog[offset++]
+  if (at === null) {
+    throw new Error('Invalid maze has no initial square')
   }
-  return { type: 'halt' }
+  return { data, at }
 }
 
 function visit(maze, next) {
@@ -92,7 +167,6 @@ function succeed(maze, path) {
   for (const [i, j] of path) {
     newMaze.data[i][j] = '!'
   }
-  console.log(path.length)
   return newMaze
 }
 

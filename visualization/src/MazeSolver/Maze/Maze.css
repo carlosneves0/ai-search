@@ -1,15 +1,26 @@
-.MazeRow {
-  margin: 0 auto;
-  width: fit-content;
-  height: calc(100vh / 31);
+.MazeContainer {
+  position: fixed;
+  top: 0;
+  bottom: 4vh;
+  left: 0;
+  right: 0;
+  display: grid;
+  align-items: center;
+  justify-content: center;
 }
 
 .MazeSquare {
-  width: calc(100vh / 31);
-  height: calc(100vh / 31);
   display: inline-block;
-  border: 1px dashed #fff;
-  box-sizing: border-box;
+  border-top: 1px dashed #fff;
+  border-left: 1px dashed #fff;
+}
+
+div:last-of-type .MazeSquare {
+  border-bottom: 1px dashed #fff;
+}
+
+div .MazeSquare:last-of-type {
+  border-right: 1px dashed #fff;
 }
 
 .MazeSquare-OutterWall-monokai {

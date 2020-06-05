@@ -1,32 +1,44 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './Maze.css'
 
 export default function Maze({ maze, theme }) {
-  // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-  // let squareSide = `calc(100vh / ${maze.m})`
-  // if (maze.m > maze.n) {
-  //   squareSide = `calc(100vw / ${maze.n})`
-  // }
-  //  squareSide={squareSide}
-  return (
-    <div className='Maze'>
-      {maze.map(row => (
-        <MazeRow row={row} theme={theme} />
-      ))}
-    </div>
-  )
-}
+  const [dim, setDim] = useState(null)
+  const mazeContentRef = useRef(null)
 
-function MazeRow({ row, squareSide, theme }) {
+  const m = maze.length
+  const n = maze[0].length
+
+  let squareSide = 0
+  if (dim) {
+    squareSide = Math.min(dim.height / (m+1), dim.width / (n+4))
+  }
+  squareSide = `${squareSide}px`
+
+  useEffect(() => {
+    if (mazeContentRef) {
+      setDim({ width: mazeContentRef.current.offsetWidth, height: mazeContentRef.current.offsetHeight })
+    }
+  }, [mazeContentRef])
+
   return (
-    <div className='MazeRow'>
-      {row.map(square => (
-        <MazeSquare
-          data={square}
-          side={squareSide}
-          theme={theme}
-        />
-      ))}
+    <div
+      className='MazeContainer'
+      ref={mazeContentRef}
+    >
+      <div>
+        {maze.map((row, index) => (
+          <div key={index} style={{ height: squareSide }}>
+            {row.map((square, index) => (
+              <MazeSquare
+                key={index}
+                data={square}
+                side={squareSide}
+                theme={theme}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -43,21 +55,61 @@ function MazeSquare({ data, side, theme }) {
 
   switch (data) {
     case MAZE_OUTTER_WALL:
-      return <span className={`MazeSquare MazeSquare-OutterWall-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-OutterWall-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_PATHWAY:
-      return <span className={`MazeSquare MazeSquare-Pathway-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Pathway-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_VISITED:
-      return <span className={`MazeSquare MazeSquare-Visited-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Visited-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_OBSTACLE:
-      return <span className={`MazeSquare MazeSquare-Obstacle-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Obstacle-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_CURRENT:
-      return <span className={`MazeSquare MazeSquare-Current-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Current-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_TARGET:
-      return <span className={`MazeSquare MazeSquare-Target-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Target-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_HIGHLIGHT:
-      return <span className={`MazeSquare MazeSquare-Highlight-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Highlight-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     case MAZE_LOWLIGHT:
-      return <span className={`MazeSquare MazeSquare-Lowlight-${theme}`} />
+      return (
+        <span
+          className={`MazeSquare MazeSquare-Lowlight-${theme}`}
+          style={{ width: side, height: side }}
+        />
+      )
     default:
       return null
   }
