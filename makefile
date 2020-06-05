@@ -85,7 +85,7 @@ _N := $(n)
 endif
 
 benchmark: build
-	@export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
+	export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
 		export N='$(_N)' && \
 		bash __scripts__/benchmark.bash
 
@@ -94,14 +94,14 @@ benchmark: build
 # Start the visualization frontend.
 ##
 visualization: mazes2js execlogs2js visualization/node_modules/.installed
-	@cd visualization && yarn start
+	cd visualization && yarn start
 
 ##
 # `make execlogs`
 # Generate and persist the execution logs for each algorithm in each maze.
 ##
 execlogs: build
-	@export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
+	export SEARCH_ALGORITHMS='$(_SEARCH_ALGORITHMS)' && \
 		bash __scripts__/execlogs.bash
 
 ##
@@ -109,14 +109,14 @@ execlogs: build
 # Convert each maze to a Javascript representation.
 ##
 mazes2js:
-	@node __scripts__/mazes2js.js
+	node __scripts__/mazes2js.js
 
 ##
 # `make execlogs2js`
 # Convert execlogs to a Javascript representation (**only the latest timestamp**).
 ##
 execlogs2js: execlogs
-	@node __scripts__/execlogs2js.js
+	node __scripts__/execlogs2js.js
 
 visualization/node_modules/.installed:
 	cd visualization && yarn install --pure-lockfile
