@@ -24,8 +24,6 @@ export default function MazeSolver() {
     document.title = algorithmPrettyName(algorithm)
   }, [algorithm])
 
-  // const execlog = execlogs[ALGORITHM][MAZE]
-  // let offset = 0
   function fireNewEvent() {
     if (execlogOffset < execlog.length) {
       return execlog[execlogOffset++]
