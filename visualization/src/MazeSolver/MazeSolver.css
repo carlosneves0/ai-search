@@ -1,0 +1,41 @@
+.MazeSolver-Content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 4vh;
+  left: 0;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.MazeSolver-Content-monokai {
+  background: #2e2e2e;
+}
+
+.MazeSolver-PathLength {
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: #fff;
+}
+
+.MazeSolver-Controls {
+  position: fixed;
+  top: 96vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.MazeSolver-Controls > * {
+  font-size: 1em;
+  text-align: center;
+}
+
+.MazeSolver-Controls-monokai {
+  background: #2e2e2e;
+  border-top: 1px solid #000;
+}

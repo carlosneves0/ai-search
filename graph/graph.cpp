@@ -1,3 +1,4 @@
+#include <iostream>
 #include "graph.hpp"
 
 graph::graph(maze& _m):
@@ -23,6 +24,36 @@ graph::graph(maze& _m):
 
 			this->_nodes.push_back(x);
 		}
+
+	// Initialize visited matrix.
+	bool**& visited = this->visited;
+	visited = new bool*[m];
+	for (uint i = 0u; i < m; i++)
+	{
+		visited[i] = new bool[n];
+		for (uint j = 0u; j < n; j++)
+			visited[i][j] = false;
+	}
+}
+
+graph::~graph()
+{
+	for (uint i = 0u; i < this->_maze.m(); i++)
+		delete [] this->visited[i];
+	delete [] this->visited;
+}
+
+bool graph::was_visited(graph::node& _n) const
+{
+	return this->visited[_n.i()][_n.j()];
+}
+
+void graph::visit(graph::node& _n)
+{
+	this->visited[_n.i()][_n.j()] = true;
+	/*%EXECLOG%*/
+	std::cerr << "visit [" << _n.i() << "," << _n.j() << "]\n";
+	/*%EXECLOG%*/
 }
 
 const std::vector<graph::node>& graph::nodes() const

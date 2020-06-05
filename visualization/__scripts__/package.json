@@ -1,0 +1,9 @@
+{
+  "name": "__scripts__",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "execa": "^4.0.2"
+  }
+}

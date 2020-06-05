@@ -1,0 +1,54 @@
+.MazeContainer {
+  position: fixed;
+  top: 0;
+  bottom: 4vh;
+  left: 0;
+  right: 0;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+}
+
+.MazeSquare {
+  display: inline-block;
+  border-top: 1px dashed #fff;
+  border-left: 1px dashed #fff;
+}
+
+div:last-of-type .MazeSquare {
+  border-bottom: 1px dashed #fff;
+}
+
+div .MazeSquare:last-of-type {
+  border-right: 1px dashed #fff;
+}
+
+.MazeSquare-OutterWall-monokai {
+  background: #222;
+}
+.MazeSquare-Pathway-monokai {
+  background: #e6e6e6;
+}
+.MazeSquare-Visited-monokai {
+  background: #9e86c8;
+}
+
+.MazeSquare-Obstacle-monokai {
+  background: #797979;
+}
+
+.MazeSquare-Current-monokai {
+  background: #f92672;
+}
+
+.MazeSquare-Target-monokai {
+  background: #ffac0e;
+}
+
+.MazeSquare-Highlight-monokai {
+  background: #a6e22e;
+}
+
+.MazeSquare-Lowlight-monokai {
+  background: #ffd866;
+}

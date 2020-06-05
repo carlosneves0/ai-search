@@ -1,0 +1,11 @@
+import maze0 from './0'
+import maze1 from './1'
+import maze2 from './2'
+import maze3 from './3'
+import maze4 from './4'
+import maze5 from './5'
+import maze6 from './6'
+import maze7 from './7'
+import maze8 from './8'
+import maze9 from './9'
+export default [maze0, maze1, maze2, maze3, maze4, maze5, maze6, maze7, maze8, maze9]
