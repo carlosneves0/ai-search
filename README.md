@@ -92,7 +92,7 @@ Or to do it manually:
 ./.bin/a_star < __mazes__/0.txt 2> /dev/null
 ```
 
-The part "`2> /dev/null`" is required to throw away the program's `stderr` output.
+The "`2> /dev/null`" part is required to throw away the program's `stderr` output.
 
 The `stderr` output has been used to log the algorithms execution and later serve as data to render a simple visualization of this algorithm's execution.
 
